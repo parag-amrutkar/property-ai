@@ -1,0 +1,63 @@
+{
+  "version": "1.0",
+  "lastUpdated": "2025-01-08",
+  "categories": {
+    "wall_damage": {
+      "name": "Wall Damage",
+      "repairs": {
+        "small_hole": {
+          "description": "Small hole in drywall (nail holes, small screws)",
+          "base_cost": 25,
+          "unit": "item",
+          "labor_multiplier": 1.2,
+          "materials": ["spackle", "sandpaper", "primer", "paint"]
+        },
+        "medium_hole": {
+          "description": "Medium hole in drywall (1-3 inches)",
+          "base_cost": 75,
+          "unit": "item", 
+          "labor_multiplier": 1.5,
+          "materials": ["drywall patch", "joint compound", "primer", "paint"]
+        },
+        "large_hole": {
+          "description": "Large hole in drywall (3+ inches)",
+          "base_cost": 150,
+          "unit": "item",
+          "labor_multiplier": 2.0,
+          "materials": ["drywall", "joint compound", "tape", "primer", "paint"]
+        }
+      }
+    },
+    "floor_damage": {
+      "name": "Floor Damage", 
+      "repairs": {
+        "hardwood_scratch": {
+          "description": "Hardwood floor scratch repair",
+          "base_cost": 50,
+          "unit": "square_foot",
+          "labor_multiplier": 1.4,
+          "materials": ["wood filler", "stain", "polyurethane"]
+        },
+        "tile_crack": {
+          "description": "Cracked tile replacement",
+          "base_cost": 35,
+          "unit": "item",
+          "labor_multiplier": 1.6,
+          "materials": ["tile", "grout", "adhesive"]
+        }
+      }
+    },
+    "stains": {
+      "name": "Stains",
+      "repairs": {
+        "water_stain": {
+          "description": "Water stain treatment and repainting",
+          "base_cost": 30,
+          "unit": "square_foot",
+          "labor_multiplier": 1.2,
+          "materials": ["stain blocker", "primer", "paint"]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "PropertyAI - AI-Assisted Property Inspection",
+  "short_name": "PropertyAI",
+  "description": "AI-powered property inspections and damage detection system",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#2563EB",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=192&h=192&fit=crop",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://images.pexels.com/photos/1396122/pexels-photo-1396122.jpeg?auto=compress&cs=tinysrgb&w=512&h=512&fit=crop", 
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ],
+  "categories": ["productivity", "business"],
+  "screenshots": [
+    {
+      "src": "https://images.pexels.com/photos/584399/living-room-couch-interior-room-584399.jpeg?auto=compress&cs=tinysrgb&w=1200&h=800&fit=crop",
+      "sizes": "1200x800",
+      "type": "image/jpeg",
+      "platform": "wide",
+      "label": "PropertyAI Dashboard - Desktop View"
+    },
+    {
+      "src": "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=750&h=1334&fit=crop",
+      "sizes": "750x1334", 
+      "type": "image/jpeg",
+      "platform": "narrow",
+      "label": "PropertyAI Camera Capture - Mobile View"
+    }
+  ],
+  "features": [
+    "Camera",
+    "Cross Platform",
+    "Fullscreen"
+  ]
+}
