@@ -64,29 +64,58 @@ const Capture: React.FC = () => {
 
   const startCamera = async () => {
     try {
+      // Stop any existing stream first
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop());
+      }
+      
+      // Simplified media constraints for better compatibility
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { 
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-          facingMode: { ideal: 'environment' } // Use back camera on mobile
+        video: {
+          width: { min: 640, ideal: 1280, max: 1920 },
+          height: { min: 480, ideal: 720, max: 1080 }
         },
         audio: false
       });
       
+      console.log('Stream acquired:', stream);
+      console.log('Video tracks:', stream.getVideoTracks());
+      
       streamRef.current = stream;
+      
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
-        // Ensure video plays after setting srcObject
-        try {
-          await videoRef.current.play();
-        } catch (playError) {
-          console.log('Auto-play prevented, user interaction required');
-        }
+        
+        // Wait for video to be ready and then play
+        videoRef.current.onloadedmetadata = async () => {
+          console.log('Video metadata loaded');
+          try {
+            if (videoRef.current) {
+              await videoRef.current.play();
+              console.log('Video playing successfully');
+            }
+          } catch (playError) {
+            console.warn('Autoplay prevented, user interaction may be required:', playError);
+          }
+        };
       }
+      
       setIsStreamActive(true);
     } catch (error) {
       console.error('Error accessing camera:', error);
-      alert('Unable to access camera. Please check permissions.');
+      let errorMessage = 'Unable to access camera. ';
+      
+      if (error.name === 'NotAllowedError') {
+        errorMessage += 'Please allow camera permissions and try again.';
+      } else if (error.name === 'NotFoundError') {
+        errorMessage += 'No camera found on this device.';
+      } else if (error.name === 'NotReadableError') {
+        errorMessage += 'Camera is already in use by another application.';
+      } else {
+        errorMessage += 'Please check your camera settings and permissions.';
+      }
+      
+      alert(errorMessage);
     }
   };
 
@@ -387,18 +416,37 @@ const Capture: React.FC = () => {
                 autoPlay
                 muted
                 playsInline
-                onLoadedMetadata={() => {
-                  if (videoRef.current) {
-                    videoRef.current.play().catch(e => console.log('Play failed:', e));
-                  }
+                controls={false}
+                style={{ 
+                  width: '100%', 
+                  height: '384px', 
+                  objectFit: 'cover',
+                  backgroundColor: '#000'
                 }}
-                onCanPlay={() => {
+                className="w-full h-96 object-cover"
+                onClick={() => {
+                  // Allow user to manually start video if autoplay fails
                   if (videoRef.current && videoRef.current.paused) {
-                    videoRef.current.play().catch(e => console.log('Play failed:', e));
+                    videoRef.current.play().catch(console.error);
                   }
                 }}
-                className="w-full h-96 object-cover bg-black"
               />
+              
+              {/* Click to play overlay if video is paused */}
+              {isStreamActive && (
+                <div 
+                  className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 cursor-pointer opacity-0 hover:opacity-100 transition-opacity"
+                  onClick={() => {
+                    if (videoRef.current && videoRef.current.paused) {
+                      videoRef.current.play().catch(console.error);
+                    }
+                  }}
+                >
+                  <div className="bg-white bg-opacity-20 text-white p-4 rounded-full backdrop-blur-sm">
+                    <Play className="h-8 w-8" />
+                  </div>
+                </div>
+              )}</function>
               
               {/* Recording Overlay */}
               {isRecording && (
