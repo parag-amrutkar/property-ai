@@ -76,6 +76,12 @@ const Capture: React.FC = () => {
       streamRef.current = stream;
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
+        // Ensure video plays after setting srcObject
+        try {
+          await videoRef.current.play();
+        } catch (playError) {
+          console.log('Auto-play prevented, user interaction required');
+        }
       }
       setIsStreamActive(true);
     } catch (error) {
@@ -381,6 +387,16 @@ const Capture: React.FC = () => {
                 autoPlay
                 muted
                 playsInline
+                onLoadedMetadata={() => {
+                  if (videoRef.current) {
+                    videoRef.current.play().catch(e => console.log('Play failed:', e));
+                  }
+                }}
+                onCanPlay={() => {
+                  if (videoRef.current && videoRef.current.paused) {
+                    videoRef.current.play().catch(e => console.log('Play failed:', e));
+                  }
+                }}
                 className="w-full h-96 object-cover bg-black"
               />
               
