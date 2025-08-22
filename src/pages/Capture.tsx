@@ -446,7 +446,6 @@ const Capture: React.FC = () => {
                     <Play className="h-8 w-8" />
                   </div>
                 </div>
-              )}</function>
               
               {/* Recording Overlay */}
               {isRecording && (
