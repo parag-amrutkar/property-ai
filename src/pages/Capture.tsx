@@ -39,7 +39,7 @@ const Capture: React.FC = () => {
   const streamRef = useRef<MediaStream | null>(null);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const recordedChunksRef = useRef<Blob[]>([]);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const rooms = [
     { value: 'living_room', label: 'Living Room' },
@@ -75,7 +75,26 @@ const Capture: React.FC = () => {
       
       streamRef.current = stream;
       if (videoRef.current) {
-        videoRef.current.srcObject = stream;
+        const videoEl = videoRef.current;
+        // Attach stream
+        videoEl.srcObject = stream as MediaStream;
+        // Safari/iOS quirks: require muted + playsinline and play after metadata
+        videoEl.muted = true;
+        videoEl.setAttribute('playsinline', 'true');
+        const tryPlay = async () => {
+          try {
+            await videoEl.play();
+          } catch (err) {
+            console.warn('Auto-play failed; will rely on next user interaction', err);
+          }
+        };
+        if (videoEl.readyState >= 2) {
+          await tryPlay();
+        } else {
+          videoEl.onloadedmetadata = () => {
+            void tryPlay();
+          };
+        }
       }
       setIsStreamActive(true);
     } catch (error) {
